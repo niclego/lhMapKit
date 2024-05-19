@@ -8,13 +8,14 @@
 import Foundation
 import CoreLocation
 
-@Observable
-class LhMapKitMock: NSObject, LhMapKitable {
-    func nearbyLocation(for searchTerm: String, from location: CLLocation) async throws -> [MapKitLocation] {
+public struct LhMapKitMock: LhMapKitable {
+    public init() {}
+
+    public func searchNearbyLocations(for searchTerm: String, from location: CLLocation) async throws -> [MapKitLocation] {
         [.mock]
     }
 
-    func nearbyAllLocations(from location: CLLocation) async throws -> [MapKitLocation] {
+    public func getAllNearbyLocations(from location: CLLocation) async throws -> [MapKitLocation] {
         [.mock]
     }
 }

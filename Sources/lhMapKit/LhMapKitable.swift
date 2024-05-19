@@ -9,6 +9,6 @@ import Foundation
 import CoreLocation
 
 public protocol LhMapKitable {
-    func nearbyLocation(for searchTerm: String, from location: CLLocation) async throws -> [MapKitLocation]
-    func nearbyAllLocations(from location: CLLocation) async throws -> [MapKitLocation]
+    func searchNearbyLocations(for searchTerm: String, from deviceLocation: CLLocation) async throws -> [MapKitLocation]
+    func getAllNearbyLocations(from deviceLocation: CLLocation) async throws -> [MapKitLocation]
 }

@@ -10,13 +10,13 @@ import CoreLocation
 
 public struct MapKitLocation {
     public let id: String
-    let name: String
-    let countryCode: String
-    let administrativeArea: String
-    let locality: String
-    let thoroughfare: String
-    let category: String
-    let location: CLLocation
+    public let name: String
+    public let countryCode: String
+    public let administrativeArea: String
+    public let locality: String
+    public let thoroughfare: String
+    public let category: String
+    public let location: CLLocation
 
     init(
         id: String,
@@ -71,7 +71,7 @@ public struct MapKitLocation {
 extension MapKitLocation: Identifiable {}
 
 extension MapKitLocation {
-    static let pinned = MapKitLocation(
+    public static let pinned = MapKitLocation(
         id: "###test###",
         name: "pinned",
         countryCode: "US",

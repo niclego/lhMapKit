@@ -8,23 +8,25 @@
 import MapKit
 
 public struct LhMapKit: LhMapKitable {
-    public func nearbyLocation(for searchTerm: String, from location: CLLocation) async throws -> [MapKitLocation] {
+    public init() {}
+
+    public func searchNearbyLocations(for searchTerm: String, from deviceLocation: CLLocation) async throws -> [MapKitLocation] {
         let req = MKLocalSearch.Request()
         req.naturalLanguageQuery = searchTerm
         req.resultTypes = .pointOfInterest
-        req.region = .init(center: location.coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
+        req.region = .init(center: deviceLocation.coordinate, latitudinalMeters: 300, longitudinalMeters: 300)
 
         let items = try await MKLocalSearch(request: req).start()
             .mapItems
             .compactMap { $0.toMapKitLocation() }
             .removeDuplicateMapKitLocations()
-            .sortedByDistance(from: location)
+            .sortedByDistance(from: deviceLocation)
 
         return items
     }
 
-    public func nearbyAllLocations(from location: CLLocation) async throws -> [MapKitLocation] {
-        let coordinate = location.coordinate
+    public func getAllNearbyLocations(from deviceLocation: CLLocation) async throws -> [MapKitLocation] {
+        let coordinate = deviceLocation.coordinate
 
         let reqBrewery = MKLocalSearch.Request()
         reqBrewery.naturalLanguageQuery = "Brewery"
@@ -96,7 +98,7 @@ public struct LhMapKit: LhMapKitable {
         .flatMap { $0 }
         .compactMap { $0.toMapKitLocation() }
         .removeDuplicateMapKitLocations()
-        .sortedByDistance(from: location)
+        .sortedByDistance(from: deviceLocation)
 
         return items
     }
@@ -149,14 +151,11 @@ extension Array where Element == MapKitLocation {
         return  items.values.map { $0 }
     }
 
-    fileprivate func sortedByDistance(from location: CLLocation) -> Self {
+    public func sortedByDistance(from location: CLLocation) -> Self {
         return self.sorted { closestDistanceSort(from: location, locationB: $0.location, locationC: $1.location) }
     }
 
     private func closestDistanceSort(from locationA: CLLocation, locationB: CLLocation, locationC: CLLocation) -> Bool {
-        let coordinatesA = locationA.coordinate
-        let coordinatesB = locationB.coordinate
-        let coordinatesC = locationC.coordinate
         let distance1 = locationA.distance(from: locationB)
         let distance2 = locationA.distance(from: locationC)
 
