@@ -71,14 +71,32 @@ public struct MapKitLocation {
 extension MapKitLocation: Identifiable {}
 
 extension MapKitLocation {
-    public static let pinned = MapKitLocation(
-        id: "###test###",
-        name: "pinned",
+    public static let pinnedId = "###PINNED###"
+    public static func pinned(at location: CLLocation) -> MapKitLocation {
+        return MapKitLocation(
+            id: "###PINNED###",
+            name: "pinned",
+            countryCode: "NA",
+            administrativeArea: "NA",
+            locality: "NA",
+            thoroughfare: "NA",
+            category: "NA",
+            location: location
+        )
+    }
+
+    public var isPinned: Bool { id == Self.pinnedId }
+}
+
+extension MapKitLocation {
+    public static let mock: MapKitLocation = .init(
+        id: "test",
+        name: "Test Place",
         countryCode: "US",
-        administrativeArea: "NY",
-        locality: "BK",
-        thoroughfare: "1109 Halsey St",
-        category: "Food",
+        administrativeArea: "Test",
+        locality: "Test",
+        thoroughfare: "Test",
+        category: "Brewery",
         location: .init(latitude: 0, longitude: 0)
     )
 }
