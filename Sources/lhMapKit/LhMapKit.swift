@@ -48,6 +48,11 @@ public struct LhMapKit: LhMapKitable {
         reqHotel.resultTypes = .pointOfInterest
         reqHotel.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
 
+        let reqMusicVenue = MKLocalSearch.Request()
+        reqMusicVenue.naturalLanguageQuery = "Music Venue"
+        reqMusicVenue.resultTypes = .pointOfInterest
+        reqMusicVenue.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
+
         let reqNightlife = MKLocalSearch.Request()
         reqNightlife.naturalLanguageQuery = "Nightlife"
         reqNightlife.resultTypes = .pointOfInterest
@@ -77,6 +82,7 @@ public struct LhMapKit: LhMapKitable {
         async let cafes = MKLocalSearch(request: reqCafes).start().mapItems
         async let fitnessCenters = MKLocalSearch(request: reqFitnesscenter).start().mapItems
         async let hotels = MKLocalSearch(request: reqHotel).start().mapItems
+        async let musicVenues = MKLocalSearch(request: reqMusicVenue).start().mapItems
         async let nightlife = MKLocalSearch(request: reqNightlife).start().mapItems
         async let restaurants = MKLocalSearch(request: reqRestaurant).start().mapItems
         async let stadiums = MKLocalSearch(request: reqStadium).start().mapItems
@@ -88,6 +94,7 @@ public struct LhMapKit: LhMapKitable {
             cafes,
             fitnessCenters,
             hotels,
+            musicVenues,
             nightlife,
             restaurants,
             stadiums,
@@ -115,7 +122,7 @@ extension MKMapItem {
             administrativeArea: tempSelf.placemark.administrativeArea,
             locality: tempSelf.placemark.locality,
             thoroughfare: tempSelf.placemark.thoroughfare,
-            category: tempSelf.pointOfInterestCategory?.category,
+            category: tempSelf.pointOfInterestCategory?.category ?? .unknown,
             location: location
         )
     }
