@@ -111,6 +111,8 @@ public struct LhMapKit: LhMapKitable {
     }
 }
 
+extension LhMapKit: Sendable {}
+
 extension MKMapItem {
     fileprivate func toMapKitLocation() -> MapKitLocation? {
         let tempSelf = self

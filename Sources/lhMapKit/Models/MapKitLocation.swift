@@ -70,6 +70,8 @@ public struct MapKitLocation {
 
 extension MapKitLocation: Identifiable {}
 
+extension MapKitLocation: Sendable {}
+
 extension MapKitLocation {
     public static let pinnedId = "###PINNED###"
     public static func pinned(at location: CLLocation) -> MapKitLocation {
