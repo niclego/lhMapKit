@@ -28,7 +28,7 @@ public struct LhMapKit: LhMapKitable {
     public func getAllNearbyLocations(from deviceLocation: CLLocation) async throws -> [MapKitLocation] {
         let coordinate = deviceLocation.coordinate
 
-        let venueRequest = MKLocalPointsOfInterestRequest(center: coordinate, radius: 150)
+        let venueRequest = MKLocalPointsOfInterestRequest(center: coordinate, radius: 2000)
         venueRequest.pointOfInterestFilter = .init(including: [
             .bakery,
             .brewery,
@@ -47,6 +47,7 @@ public struct LhMapKit: LhMapKitable {
         .flatMap { $0 }
         .compactMap { $0.toMapKitLocation() }
         .removeDuplicateMapKitLocations()
+        .sortedByDistance(from: deviceLocation)
 
         return items
     }
