@@ -28,84 +28,25 @@ public struct LhMapKit: LhMapKitable {
     public func getAllNearbyLocations(from deviceLocation: CLLocation) async throws -> [MapKitLocation] {
         let coordinate = deviceLocation.coordinate
 
-        let reqBrewery = MKLocalSearch.Request()
-        reqBrewery.naturalLanguageQuery = "Brewery"
-        reqBrewery.resultTypes = .pointOfInterest
-        reqBrewery.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
+        let venueRequest = MKLocalPointsOfInterestRequest(center: coordinate, radius: 150)
+        venueRequest.pointOfInterestFilter = .init(including: [
+            .bakery,
+            .brewery,
+            .cafe,
+            .nightlife,
+            .restaurant,
+            .stadium,
+            .theater,
+            .winery
+        ])
 
-        let reqCafes = MKLocalSearch.Request()
-        reqCafes.naturalLanguageQuery = "Cafe"
-        reqCafes.resultTypes = .pointOfInterest
-        reqCafes.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        let reqFitnesscenter = MKLocalSearch.Request()
-        reqFitnesscenter.naturalLanguageQuery = "Fitness Center"
-        reqFitnesscenter.resultTypes = .pointOfInterest
-        reqFitnesscenter.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        let reqHotel = MKLocalSearch.Request()
-        reqHotel.naturalLanguageQuery = "Hotel"
-        reqHotel.resultTypes = .pointOfInterest
-        reqHotel.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        let reqMusicVenue = MKLocalSearch.Request()
-        reqMusicVenue.naturalLanguageQuery = "Music Venue"
-        reqMusicVenue.resultTypes = .pointOfInterest
-        reqMusicVenue.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        let reqNightlife = MKLocalSearch.Request()
-        reqNightlife.naturalLanguageQuery = "Nightlife"
-        reqNightlife.resultTypes = .pointOfInterest
-        reqNightlife.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        let reqRestaurant = MKLocalSearch.Request()
-        reqRestaurant.naturalLanguageQuery = "Restaurant"
-        reqRestaurant.resultTypes = .pointOfInterest
-        reqRestaurant.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        let reqStadium = MKLocalSearch.Request()
-        reqStadium.naturalLanguageQuery = "Stadium"
-        reqStadium.resultTypes = .pointOfInterest
-        reqStadium.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        let reqTheater = MKLocalSearch.Request()
-        reqTheater.naturalLanguageQuery = "Theater"
-        reqTheater.resultTypes = .pointOfInterest
-        reqTheater.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        let reqWinery = MKLocalSearch.Request()
-        reqWinery.naturalLanguageQuery = "Winery"
-        reqWinery.resultTypes = .pointOfInterest
-        reqWinery.region = .init(center: coordinate, latitudinalMeters: 150, longitudinalMeters: 150)
-
-        async let breweries = MKLocalSearch(request: reqBrewery).start().mapItems
-        async let cafes = MKLocalSearch(request: reqCafes).start().mapItems
-        async let fitnessCenters = MKLocalSearch(request: reqFitnesscenter).start().mapItems
-        async let hotels = MKLocalSearch(request: reqHotel).start().mapItems
-        async let musicVenues = MKLocalSearch(request: reqMusicVenue).start().mapItems
-        async let nightlife = MKLocalSearch(request: reqNightlife).start().mapItems
-        async let restaurants = MKLocalSearch(request: reqRestaurant).start().mapItems
-        async let stadiums = MKLocalSearch(request: reqStadium).start().mapItems
-        async let theaters = MKLocalSearch(request: reqTheater).start().mapItems
-        async let wineries = MKLocalSearch(request: reqWinery).start().mapItems
-
+        async let localspots = MKLocalSearch(request: venueRequest).start().mapItems
         let items = try await [
-            breweries,
-            cafes,
-            fitnessCenters,
-            hotels,
-            musicVenues,
-            nightlife,
-            restaurants,
-            stadiums,
-            theaters,
-            stadiums,
-            wineries
+            localspots
         ]
         .flatMap { $0 }
         .compactMap { $0.toMapKitLocation() }
         .removeDuplicateMapKitLocations()
-        .sortedByDistance(from: deviceLocation)
 
         return items
     }
