@@ -29,15 +29,21 @@ public struct LhMapKit: LhMapKitable {
         let coordinate = deviceLocation.coordinate
 
         let venueRequest = MKLocalPointsOfInterestRequest(center: coordinate, radius: 2000)
-        venueRequest.pointOfInterestFilter = .init(including: [
-            .bakery,
-            .brewery,
-            .cafe,
-            .nightlife,
-            .restaurant,
-            .stadium,
-            .theater,
-            .winery
+        venueRequest.pointOfInterestFilter = .init(excluding: [
+            .atm,
+            .bank,
+            .carRental,
+            .evCharger,
+            .hospital,
+            .laundry,
+            .library,
+            .parking,
+            .pharmacy,
+            .police,
+            .fireStation,
+            .postOffice,
+            .publicTransport,
+            .restroom
         ])
 
         async let localspots = MKLocalSearch(request: venueRequest).start().mapItems
