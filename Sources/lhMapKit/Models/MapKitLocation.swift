@@ -31,9 +31,9 @@ public struct MapKitLocation {
         self.name = name
         self.id = id
         self.countryCode = countryCode
-        self.administrativeArea = administrativeArea
-        self.locality = locality
-        self.thoroughfare = thoroughfare
+        self.administrativeArea = administrativeArea // State
+        self.locality = locality // City
+        self.thoroughfare = thoroughfare // Street
         self.category = category
         self.location = location
     }
@@ -95,9 +95,9 @@ extension MapKitLocation {
         id: "test",
         name: "Test Place",
         countryCode: "US",
-        administrativeArea: "Test",
-        locality: "Test",
-        thoroughfare: "Test",
+        administrativeArea: "State",
+        locality: "City",
+        thoroughfare: "1 Street",
         category: "Brewery",
         location: .init(latitude: 0, longitude: 0)
     )
